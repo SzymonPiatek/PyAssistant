@@ -18,23 +18,31 @@ class Assistant(ctk.CTkFrame):
 
         # create widgets
         self.assistant_button = FirstButton(self, text = START, func = self.start)
+        self.assistant_label = FirstLabel(self, text = '🙂')
 
         # display widgets
-        self.assistant_button.place(relx = 0.5, rely = 0.5, anchor = 'center',
-                               relwidth = 1, relheight = 0.3)
-            
-    def speak(self, text, rate = 120):
-        engine = pyttsx3.init()
-        engine.setProperty('rate', rate)
-        engine.say(text)
-        engine.runAndWait()
+        self.assistant_button.place(relx = 0.5, rely = 0.8, anchor = 'center',
+                               relwidth = 0.6, relheight = 0.1)
+        self.assistant_label.place(relx = 0.5, rely = 0.35, anchor = 'center')
+
+    def speak(self, text, rate = 130):
+        self.engine = pyttsx3.init()
+
+        voices = self.engine.getProperty('voices')
+        self.engine.setProperty('voice', voices[1].id)
+        self.engine.setProperty('rate', rate)
+        self.engine.setProperty('pitch', 1)
+
+        self.engine.say(text)
+        self.engine.runAndWait()
 
     def recognize_speech(self):
         recognizer = sr.Recognizer()
-            
+
         with sr.Microphone() as source:
             text = HELP
             self.assistant_button.configure(text = text)
+            self.assistant_label.configure(text = '🧐')
             self.update()
             self.speak(text)
             self.assistant_button.configure(text = LISTEN)
@@ -48,8 +56,10 @@ class Assistant(ctk.CTkFrame):
         except sr.UnknownValueError:
             text = NO_UNDERSTAND
             self.assistant_button.configure(text = text)
+            self.assistant_label.configure(text = '😑')
+            self.update()
             self.speak(text)
-            return ''
+            return False
 
     def open_in_google_chrome(self, url):
         chrome_path = 'C:/Program Files/Google/Chrome/Application/chrome.exe'
@@ -60,6 +70,7 @@ class Assistant(ctk.CTkFrame):
         google_chrome = ['open google chrome', 'open google', 'open chrome', 'google chrome', 'google', 'chrome']
         youtube = ['open youtube', 'youtube']
         facebook = ['open facebook', 'facebook']
+        messenger = ['open messenger', 'messenger']
 
         if user_input in google_chrome:
             self.open_in_google_chrome(url = '')
@@ -70,17 +81,26 @@ class Assistant(ctk.CTkFrame):
         elif user_input in facebook:
             self.open_in_google_chrome(url = 'facebook.com')
             self.speak('I opened Facebook in Google Chrome')
+        elif user_input in messenger:
+            self.open_in_google_chrome(url = 'messenger.com')
+            self.speak('I opened Messenger in Google Chrome')
+        
+        self.assistant_label.configure(text = '😎')
+        self.update()
 
     def start(self):
-        # self.assistant_button.configure(text = HELP)
-        # self.update()
-
         if wordnet:
             pass
         else:
             nltk.download('wordnet')
 
-        user_input = (self.recognize_speech()).lower()
-
-        self.assistant_button.configure(text = START)
-        self.recognize_command(user_input)
+        user_input = self.recognize_speech()
+        
+        if user_input is not False:
+            user_input = user_input.lower()
+            self.recognize_command(user_input)
+            self.assistant_button.configure(text = START)
+            self.update()
+        elif user_input is False:
+            self.assistant_button.configure(text = START)
+            self.update()

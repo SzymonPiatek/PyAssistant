@@ -38,7 +38,7 @@ class App(ctk.CTk):
 
     def quit_question(self, event):
         if event.keysym == 'Escape':
-            result = messagebox.askquestion('', EXIT)
+            result = messagebox.askquestion(EXIT_WARNING, EXIT)
             if result == 'yes':
                 self.destroy()
 
