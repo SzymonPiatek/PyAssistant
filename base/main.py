@@ -2,9 +2,7 @@ import speech_recognition as sr
 import nltk
 from nltk.corpus import wordnet
 import pyttsx3
-import pyaudio
 import webbrowser
-import time
 
 def speak(text, rate = 120):
     engine = pyttsx3.init()

@@ -9,7 +9,8 @@ class VersionLabel(ctk.CTkLabel):
             text = text, 
             fg_color = COLOR, 
             justify = 'center', 
-            text_color = TEXT_COLOR)
+            text_color = TEXT_COLOR,
+            font = (ctk.CTkFont(family = FONT_FAMILY, size = FONT_SIZE, weight = 'bold')))
         
 class FirstButton(ctk.CTkButton):
     def __init__(self, parent, text, func):
@@ -19,4 +20,5 @@ class FirstButton(ctk.CTkButton):
             text = text, 
             text_color = TEXT_COLOR2,
             command = func,
-            corner_radius = 100)
+            corner_radius = 100,
+            font = (ctk.CTkFont(family = FONT_FAMILY, size = FONT_SIZE2, weight = 'bold')))

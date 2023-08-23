@@ -4,13 +4,13 @@ from widgets import *
 import tkinter as tk
 import customtkinter as ctk
 
+import sys
+
 import speech_recognition as sr
 import nltk
 from nltk.corpus import wordnet
 import pyttsx3
-import pyaudio
 import webbrowser
-import time
 
 class Assistant(ctk.CTkFrame):
     def __init__(self, master):
@@ -21,7 +21,7 @@ class Assistant(ctk.CTkFrame):
 
         # display widgets
         self.assistant_button.place(relx = 0.5, rely = 0.5, anchor = 'center',
-                               relwidth = 0.3, relheight = 0.3)
+                               relwidth = 1, relheight = 0.3)
             
     def speak(self, text, rate = 120):
         engine = pyttsx3.init()
@@ -35,7 +35,10 @@ class Assistant(ctk.CTkFrame):
         with sr.Microphone() as source:
             text = HELP
             self.assistant_button.configure(text = text)
+            self.update()
             self.speak(text)
+            self.assistant_button.configure(text = LISTEN)
+            self.update()
             audio = recognizer.listen(source, timeout = 3)
 
         try:
@@ -48,7 +51,7 @@ class Assistant(ctk.CTkFrame):
             self.speak(text)
             return ''
 
-    def open_in_google_chrome(url):
+    def open_in_google_chrome(self, url):
         chrome_path = 'C:/Program Files/Google/Chrome/Application/chrome.exe'
         webbrowser.register('chrome', None, webbrowser.BackgroundBrowser(chrome_path))
         webbrowser.get('chrome').open(url)
@@ -59,16 +62,19 @@ class Assistant(ctk.CTkFrame):
         facebook = ['open facebook', 'facebook']
 
         if user_input in google_chrome:
-            self.speak('I open Google Chrome')
             self.open_in_google_chrome(url = '')
+            self.speak('I opened Google Chrome')
         elif user_input in youtube:
-            self.speak('I open Youtube in Google Chrome')
             self.open_in_google_chrome(url = 'youtube.com')
+            self.speak('I opened Youtube in Google Chrome')
         elif user_input in facebook:
-            self.speak('I open Facebook in Google Chrome')
             self.open_in_google_chrome(url = 'facebook.com')
+            self.speak('I opened Facebook in Google Chrome')
 
     def start(self):
+        # self.assistant_button.configure(text = HELP)
+        # self.update()
+
         if wordnet:
             pass
         else:
@@ -76,5 +82,5 @@ class Assistant(ctk.CTkFrame):
 
         user_input = (self.recognize_speech()).lower()
 
-        self.assistant_button.configure(text = ('You said:', user_input))
+        self.assistant_button.configure(text = START)
         self.recognize_command(user_input)
