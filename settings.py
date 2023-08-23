@@ -18,7 +18,7 @@ FONT_SIZE3 = 240
 # Texts
 EXIT = 'Do you want to close the application?'
 EXIT_WARNING = 'Warning'
-VERSION = 'v0.0.4'
+VERSION = 'v0.0.5'
 
 START = 'Start'
 HELP = 'Can I help you?'

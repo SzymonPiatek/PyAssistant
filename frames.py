@@ -11,6 +11,7 @@ import nltk
 from nltk.corpus import wordnet
 import pyttsx3
 import webbrowser
+import pywhatkit
 
 class Assistant(ctk.CTkFrame):
     def __init__(self, master):
@@ -67,23 +68,24 @@ class Assistant(ctk.CTkFrame):
         webbrowser.get('chrome').open(url)
 
     def recognize_command(self, user_input):
-        google_chrome = ['open google chrome', 'open google', 'open chrome', 'google chrome', 'google', 'chrome']
-        youtube = ['open youtube', 'youtube']
+        google_chrome = ['open google chrome', 'open google', 'open chrome']
         facebook = ['open facebook', 'facebook']
         messenger = ['open messenger', 'messenger']
 
-        if user_input in google_chrome:
-            self.open_in_google_chrome(url = '')
-            self.speak('I opened Google Chrome')
-        elif user_input in youtube:
-            self.open_in_google_chrome(url = 'youtube.com')
-            self.speak('I opened Youtube in Google Chrome')
+        if 'youtube' in user_input:
+            pywhatkit.playonyt(user_input)
+            self.speak('I opened Youtube')
+        elif user_input in google_chrome:
+            pywhatkit.search('')
         elif user_input in facebook:
             self.open_in_google_chrome(url = 'facebook.com')
             self.speak('I opened Facebook in Google Chrome')
         elif user_input in messenger:
             self.open_in_google_chrome(url = 'messenger.com')
             self.speak('I opened Messenger in Google Chrome')
+        else:
+            pywhatkit.search(user_input)
+            self.speak('I opened Google Chrome with this query')
         
         self.assistant_label.configure(text = '😎')
         self.update()
