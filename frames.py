@@ -72,17 +72,22 @@ class Assistant(ctk.CTkFrame):
         facebook = ['open facebook', 'facebook']
         messenger = ['open messenger', 'messenger']
 
+        # Youtube
         if 'youtube' in user_input:
             pywhatkit.playonyt(user_input)
             self.speak('I opened Youtube')
+        # New chrome tab 
         elif user_input in google_chrome:
             pywhatkit.search('')
+        # Facebook
         elif user_input in facebook:
             self.open_in_google_chrome(url = 'facebook.com')
             self.speak('I opened Facebook in Google Chrome')
+        # Messenger
         elif user_input in messenger:
             self.open_in_google_chrome(url = 'messenger.com')
             self.speak('I opened Messenger in Google Chrome')
+        # Query in Google Chrome
         else:
             pywhatkit.search(user_input)
             self.speak('I opened Google Chrome with this query')
